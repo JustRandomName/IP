@@ -1,0 +1,6 @@
+D:\Ipy\laba2\laba2\bin\Debug\laba2.exe.config
+D:\Ipy\laba2\laba2\obj\Debug\laba2.csprojResolveAssemblyReference.cache
+D:\Ipy\laba2\laba2\bin\Debug\laba2.exe
+D:\Ipy\laba2\laba2\bin\Debug\laba2.pdb
+D:\Ipy\laba2\laba2\obj\Debug\laba2.exe
+D:\Ipy\laba2\laba2\obj\Debug\laba2.pdb
