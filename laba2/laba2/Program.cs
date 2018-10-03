@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Management;
 
 namespace laba2
@@ -12,9 +14,7 @@ namespace laba2
 
         private static void Form1_Load()
         {
-            ManagementObjectSearcher searcher =
-                new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive");
-
+           
             var driveQuery = new ManagementObjectSearcher("select * from Win32_DiskDrive");
             foreach (ManagementObject d in driveQuery.Get())
             {
@@ -24,13 +24,14 @@ namespace laba2
                 var partitionQuery = new ManagementObjectSearcher(partitionQueryText);
                 foreach (ManagementObject p in partitionQuery.Get())
                 {
-                    ;
                     var logicalDriveQueryText = string.Format("associators of {{{0}}} where AssocClass = Win32_LogicalDiskToPartition", p.Path.RelativePath);
                     var logicalDriveQuery = new ManagementObjectSearcher(logicalDriveQueryText);
                     foreach (ManagementObject ld in logicalDriveQuery.Get())
                     {
 
-
+                        var manufacturer = Convert.ToString(d.Properties["Manufacturer"].Value);
+                        var firmwareRevision = Convert.ToString(d.Properties["FirmwareRevision"].Value);
+                        var serialNumder = Convert.ToString(d.Properties["SerialNumber"].Value);
                         var physicalName = Convert.ToString(d.Properties["Name"].Value); // \\.\PHYSICALDRIVE2
                         var diskName = Convert.ToString(d.Properties["Caption"].Value); // WDC WD5001AALS-xxxxxx
                         var diskModel = Convert.ToString(d.Properties["Model"].Value); // WDC WD5001AALS-xxxxxx
@@ -46,17 +47,19 @@ namespace laba2
                         var driveCompressed = Convert.ToBoolean(ld.Properties["Compressed"].Value);
                         var driveType = Convert.ToUInt32(ld.Properties["DriveType"].Value); // C: - 3
                         var fileSystem = Convert.ToString(ld.Properties["FileSystem"].Value); // NTFS
-                        var freeSpace = Convert.ToUInt64(ld.Properties["FreeSpace"].Value); // in bytes
-                        var totalSpace = Convert.ToUInt64(ld.Properties["Size"].Value); // in bytes
+                        var freeSpace = Convert.ToUInt64(ld.Properties["FreeSpace"].Value) / 1024; // in bytes
+                        var totalSpace = Convert.ToUInt64(ld.Properties["Size"].Value) / 1024; // in bytes
                         var driveMediaType = Convert.ToUInt32(ld.Properties["MediaType"].Value); // c: 12
                         var volumeName = Convert.ToString(ld.Properties["VolumeName"].Value); // System
                         var volumeSerial = Convert.ToString(ld.Properties["VolumeSerialNumber"].Value); // 12345678
 
+                        Console.WriteLine("Manufacturer: {0}", manufacturer);
                         Console.WriteLine("PhysicalName: {0}", physicalName);
-                        Console.WriteLine("DiskName: {0}", diskName);
+                        Console.WriteLine("SerialNumber: {0}", serialNumder.Trim());
+                        Console.WriteLine("FirmwareRevision: {0}", firmwareRevision);
                         Console.WriteLine("DiskModel: {0}", diskModel);
                         Console.WriteLine("DiskInterface: {0}", diskInterface);
-                        // Console.WriteLine("Capabilities: {0}", capabilities);
+                        Console.WriteLine("Capabilities: {0}", capabilities.Select(v => v.ToString()).Aggregate((res, right) => res +" "+ right));
                         Console.WriteLine("MediaLoaded: {0}", mediaLoaded);
                         Console.WriteLine("MediaType: {0}", mediaType);
                         Console.WriteLine("MediaSignature: {0}", mediaSignature);
@@ -69,6 +72,7 @@ namespace laba2
                         Console.WriteLine("FileSystem: {0}", fileSystem);
                         Console.WriteLine("FreeSpace: {0}", freeSpace);
                         Console.WriteLine("TotalSpace: {0}", totalSpace);
+                        Console.WriteLine("UseSpace: {0}", totalSpace - freeSpace);
                         Console.WriteLine("DriveMediaType: {0}", driveMediaType);
                         Console.WriteLine("VolumeName: {0}", volumeName);
                         Console.WriteLine("VolumeSerial: {0}", volumeSerial);
