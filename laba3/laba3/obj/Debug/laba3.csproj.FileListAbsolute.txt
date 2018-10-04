@@ -4,3 +4,4 @@ D:\Ipy\laba3\laba3\bin\Debug\laba3.pdb
 D:\Ipy\laba3\laba3\obj\Debug\laba3.csprojResolveAssemblyReference.cache
 D:\Ipy\laba3\laba3\obj\Debug\laba3.exe
 D:\Ipy\laba3\laba3\obj\Debug\laba3.pdb
+D:\Ipy\laba3\laba3\bin\Debug\cmd.dll
